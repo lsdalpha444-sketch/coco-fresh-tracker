@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cocofresh BD — Find Our Cart</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700;1,9..144,900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --g1:#0a3d1f;--g2:#1aac5a;--g3:#a8f0c6;--g4:#f0faf4;
+  --ink:#0d1f10;--ink2:#2d4a32;--ink3:#6a8a6f;
+  --white:#fff;--cream:#f8fdf9;
+  --red:#e24b4a;--amber:#f5a623;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  min-height:100vh;
+}
+
+/* ── HEADER ── */
+.header{
+  background:var(--g1);
+  padding:0 24px;
+  height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{font-size:22px;}
+.logo-text{font-size:14px;font-weight:700;color:#fff;letter-spacing:1px;}
+.logo-sub{font-size:10px;color:var(--g3);letter-spacing:2px;text-transform:uppercase;}
+.header-right{display:flex;align-items:center;gap:10px;}
+.wa-btn{
+  background:var(--g2);border:none;border-radius:30px;
+  padding:9px 18px;
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;
+  color:#fff;cursor:pointer;letter-spacing:0.5px;
+  text-decoration:none;display:flex;align-items:center;gap:6px;
+}
+.admin-btn{
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+  border-radius:30px;padding:8px 14px;
+  font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;
+  color:rgba(255,255,255,0.6);cursor:pointer;
+}
+.admin-btn:hover{background:rgba(255,255,255,0.15);color:#fff;}
+
+/* ── HERO ── */
+.hero{
+  background:var(--g1);
+  padding:48px 24px 56px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero-orb1{position:absolute;top:-100px;right:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(26,172,90,0.2) 0%,transparent 65%);}
+.hero-orb2{position:absolute;bottom:-120px;left:-60px;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(26,172,90,0.12) 0%,transparent 65%);}
+.hero-inner{position:relative;z-index:2;}
+.hero-kicker{font-size:11px;font-weight:700;letter-spacing:5px;color:rgba(168,240,198,0.6);text-transform:uppercase;margin-bottom:12px;}
+.hero-title{
+  font-family:'Fraunces',serif;
+  font-size:52px;font-weight:900;color:#fff;
+  line-height:1.0;margin-bottom:8px;
+}
+.hero-title em{color:var(--g2);font-style:italic;}
+.hero-sub{font-size:16px;color:rgba(255,255,255,0.45);font-weight:300;margin-bottom:28px;}
+
+/* Live status pill */
+.live-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(26,172,90,0.15);
+  border:1.5px solid rgba(26,172,90,0.4);
+  border-radius:40px;padding:10px 22px;
+  margin-bottom:0;
+}
+.live-dot{
+  width:9px;height:9px;border-radius:50%;background:var(--g2);
+  box-shadow:0 0 0 3px rgba(26,172,90,0.25);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(26,172,90,0.25);}50%{box-shadow:0 0 0 6px rgba(26,172,90,0.1);}}
+.live-text{font-size:13px;font-weight:600;color:var(--g3);}
+
+/* ── MAIN CONTAINER ── */
+.main{max-width:640px;margin:0 auto;padding:24px 16px 48px;}
+
+/* ── TODAY CARD ── */
+.today-card{
+  background:var(--white);
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 4px 24px rgba(10,61,31,0.08);
+  margin-bottom:20px;
+}
+.tc-header{
+  background:var(--g2);
+  padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.tc-header-left{display:flex;align-items:center;gap:10px;}
+.tc-icon{font-size:22px;}
+.tc-title{font-size:14px;font-weight:700;color:#fff;letter-spacing:0.5px;}
+.tc-date{font-size:11px;color:rgba(255,255,255,0.65);}
+.tc-status-badge{
+  background:rgba(255,255,255,0.2);
+  border-radius:20px;padding:5px 12px;
+  font-size:11px;font-weight:700;color:#fff;
+}
+.tc-body{padding:20px 24px;}
+.tc-note{
+  font-size:13px;color:var(--ink3);
+  background:var(--g4);border-radius:10px;
+  padding:10px 14px;margin-bottom:16px;
+  line-height:1.5;
+  display:none;
+}
+.tc-note.show{display:block;}
+
+/* Stop cards */
+.stops{display:flex;flex-direction:column;gap:10px;}
+.stop{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;
+  background:var(--cream);border-radius:12px;
+  border:1.5px solid transparent;
+  transition:all .2s;
+}
+.stop.active{
+  background:var(--g4);
+  border-color:rgba(26,172,90,0.3);
+}
+.stop.done{opacity:0.45;}
+.stop-time{
+  font-size:12px;font-weight:700;
+  color:var(--ink3);
+  width:80px;flex-shrink:0;
+  font-family:'DM Sans',monospace;
+}
+.stop.active .stop-time{color:var(--g2);}
+.stop-pin{
+  font-size:18px;flex-shrink:0;
+}
+.stop-info{flex:1;}
+.stop-name{font-size:14px;font-weight:700;color:var(--ink);}
+.stop.active .stop-name{color:var(--g1);}
+.stop-area{font-size:12px;color:var(--ink3);margin-top:1px;}
+.stop-tag{
+  font-size:10px;font-weight:700;
+  background:var(--g2);color:#fff;
+  border-radius:12px;padding:3px 10px;
+  flex-shrink:0;
+}
+.stop.done .stop-tag{background:rgba(0,0,0,0.1);color:var(--ink3);}
+.stop-tag.upcoming{background:rgba(26,172,90,0.15);color:var(--g1);}
+
+/* No stops message */
+.no-stops{text-align:center;padding:32px 20px;color:var(--ink3);font-size:14px;}
+.no-stops .ns-icon{font-size:40px;margin-bottom:10px;}
+
+/* ── WEEK SCHEDULE ── */
+.section-title{
+  font-size:11px;font-weight:700;letter-spacing:4px;
+  color:var(--ink3);text-transform:uppercase;
+  margin-bottom:14px;padding-left:4px;
+}
+.week-card{
+  background:var(--white);border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 2px 16px rgba(10,61,31,0.06);
+  margin-bottom:20px;
+}
+.day-row{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:16px 20px;
+  border-bottom:1px solid var(--g4);
+}
+.day-row:last-child{border-bottom:none;}
+.day-row.today-row{background:var(--g4);}
+.day-left{width:52px;flex-shrink:0;text-align:center;}
+.day-name{font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:1px;text-transform:uppercase;}
+.day-date{font-size:15px;font-weight:700;color:var(--ink);}
+.day-row.today-row .day-name{color:var(--g2);}
+.day-row.today-row .day-date{color:var(--g1);}
+.day-divider{width:1px;background:var(--g4);align-self:stretch;flex-shrink:0;}
+.day-stops{flex:1;display:flex;flex-direction:column;gap:6px;}
+.ds-item{display:flex;align-items:center;gap:8px;font-size:13px;}
+.ds-time{color:var(--ink3);font-size:11px;width:70px;flex-shrink:0;}
+.ds-name{color:var(--ink);font-weight:500;}
+.ds-empty{font-size:13px;color:var(--ink3);font-style:italic;}
+.today-badge{
+  font-size:9px;font-weight:700;background:var(--g2);color:#fff;
+  border-radius:10px;padding:2px 7px;letter-spacing:1px;
+}
+
+/* ── ORDER SECTION ── */
+.order-card{
+  background:var(--g1);border-radius:16px;
+  padding:24px 22px;margin-bottom:20px;
+  display:flex;align-items:center;gap:18px;
+}
+.oc-icon{font-size:36px;flex-shrink:0;}
+.oc-text{flex:1;}
+.oc-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;}
+.oc-sub{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.5;}
+.oc-btn{
+  background:var(--g2);border:none;border-radius:30px;
+  padding:12px 22px;font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:700;color:#fff;
+  cursor:pointer;white-space:nowrap;text-decoration:none;
+  display:inline-block;
+}
+
+/* ── FOOTER ── */
+.footer{
+  text-align:center;padding:28px 16px;
+  border-top:1px solid rgba(10,61,31,0.08);
+}
+.footer-logo{font-size:13px;font-weight:700;color:var(--ink3);letter-spacing:1px;margin-bottom:4px;}
+.footer-sub{font-size:11px;color:var(--ink3);opacity:.6;}
+
+/* ── ADMIN PANEL ── */
+.admin-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.55);
+  z-index:500;display:none;align-items:flex-end;justify-content:center;
+}
+.admin-overlay.show{display:flex;}
+.admin-panel{
+  background:var(--white);border-radius:24px 24px 0 0;
+  width:100%;max-width:640px;
+  max-height:90vh;overflow-y:auto;
+  padding:24px 22px 40px;
+}
+.ap-handle{width:36px;height:4px;background:var(--g4);border-radius:2px;margin:0 auto 20px;}
+.ap-title{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.ap-sub{font-size:13px;color:var(--ink3);margin-bottom:24px;}
+
+/* Auth */
+.auth-section{margin-bottom:20px;}
+.auth-row{display:flex;gap:8px;}
+.auth-input{
+  flex:1;padding:12px 14px;
+  border:1.5px solid rgba(10,61,31,0.15);border-radius:10px;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);
+  outline:none;
+}
+.auth-input:focus{border-color:var(--g2);}
+.auth-btn{
+  background:var(--g1);border:none;border-radius:10px;
+  padding:12px 18px;font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:700;color:#fff;cursor:pointer;
+}
+
+.edit-section{display:none;}
+.edit-section.show{display:block;}
+
+.fg{margin-bottom:16px;}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
+.fg input,.fg select,.fg textarea{
+  width:100%;padding:11px 13px;
+  border:1.5px solid rgba(10,61,31,0.15);border-radius:10px;
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);
+  outline:none;background:var(--white);
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--g2);}
+.fg textarea{resize:vertical;min-height:60px;}
+
+.stops-editor{margin-bottom:20px;}
+.stop-edit-row{
+  display:grid;grid-template-columns:85px 1fr 90px 36px;
+  gap:8px;margin-bottom:8px;align-items:center;
+}
+.stop-edit-row input,.stop-edit-row select{
+  padding:9px 10px;border:1.5px solid rgba(10,61,31,0.15);border-radius:8px;
+  font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);outline:none;width:100%;
+}
+.stop-edit-row input:focus,.stop-edit-row select:focus{border-color:var(--g2);}
+.del-stop{
+  background:none;border:1.5px solid rgba(220,50,50,0.25);border-radius:8px;
+  width:36px;height:36px;cursor:pointer;color:#c94040;font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+}
+.add-stop-btn{
+  background:var(--g4);border:1.5px dashed rgba(26,172,90,0.3);
+  border-radius:8px;padding:10px;width:100%;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+  color:var(--g2);cursor:pointer;margin-bottom:16px;
+}
+
+/* Week editor */
+.week-editor{background:var(--cream);border-radius:12px;padding:14px;margin-bottom:16px;}
+.we-title{font-size:12px;font-weight:700;color:var(--ink3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+.we-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.we-day{font-size:12px;font-weight:700;color:var(--ink);width:40px;flex-shrink:0;}
+.we-row input{
+  flex:1;padding:8px 10px;border:1.5px solid rgba(10,61,31,0.12);border-radius:7px;
+  font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);outline:none;
+}
+.we-row input:focus{border-color:var(--g2);}
+
+.save-btn{
+  width:100%;background:var(--g2);border:none;border-radius:12px;
+  padding:16px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;
+  color:#fff;cursor:pointer;margin-bottom:10px;
+}
+.save-btn:hover{background:#15994e;}
+.close-btn{
+  width:100%;background:none;border:1.5px solid rgba(10,61,31,0.12);border-radius:12px;
+  padding:13px;font-family:'DM Sans',sans-serif;font-size:14px;
+  color:var(--ink3);cursor:pointer;
+}
+.save-success{
+  background:var(--g4);border:1.5px solid rgba(26,172,90,0.3);border-radius:10px;
+  padding:12px 16px;text-align:center;font-size:13px;font-weight:600;
+  color:var(--g1);margin-bottom:12px;display:none;
+}
+.save-success.show{display:block;}
+.auth-error{font-size:12px;color:var(--red);margin-top:6px;display:none;}
+.auth-error.show{display:block;}
+
+/* Stop status colours */
+.stop-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dot-active{background:var(--g2);}
+.dot-upcoming{background:var(--amber);}
+.dot-done{background:rgba(0,0,0,0.15);}
+
+@media(max-width:480px){
+  .hero-title{font-size:38px;}
+  .stop-edit-row{grid-template-columns:75px 1fr 80px 32px;}
+  .order-card{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon">🥥</div>
+    <div>
+      <div class="logo-text">Cocofresh BD</div>
+      <div class="logo-sub">Cart Tracker</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <a class="wa-btn" href="https://wa.me/8801410586224" target="_blank">📲 Order</a>
+    <button class="admin-btn" onclick="openAdmin()">Update</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-orb1"></div>
+  <div class="hero-orb2"></div>
+  <div class="hero-inner">
+    <div class="hero-kicker">Live location</div>
+    <div class="hero-title">Find our <em>cart.</em></div>
+    <div class="hero-sub">Updated every morning — check here before you head out</div>
+    <div class="live-pill">
+      <div class="live-dot"></div>
+      <span class="live-text" id="live-text">Loading today's location...</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TODAY CARD -->
+  <div class="today-card">
+    <div class="tc-header">
+      <div class="tc-header-left">
+        <div class="tc-icon">🛒</div>
+        <div>
+          <div class="tc-title">Today's Schedule</div>
+          <div class="tc-date" id="today-date-display"></div>
+        </div>
+      </div>
+      <div class="tc-status-badge" id="today-status-badge">Live</div>
+    </div>
+    <div class="tc-body">
+      <div class="tc-note" id="today-note"></div>
+      <div class="stops" id="stops-list">
+        <div class="no-stops">
+          <div class="ns-icon">📍</div>
+          <div>No locations set for today yet.<br>Check back in the morning!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK SCHEDULE -->
+  <div class="section-title">This week's route</div>
+  <div class="week-card" id="week-schedule"></div>
+
+  <!-- ORDER CTA -->
+  <div class="order-card">
+    <div class="oc-icon">📦</div>
+    <div class="oc-text">
+      <div class="oc-title">Can't find us? Order delivery.</div>
+      <div class="oc-sub">WhatsApp by 10am — delivered fresh to your door in Sylhet.</div>
+    </div>
+    <a class="oc-btn" href="https://wa.me/8801410586224?text=Hi%20Cocofresh%20BD%2C%20I%20want%20to%20order%20delivery" target="_blank">WhatsApp →</a>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-logo">COCOFRESH BD · SYLHET</div>
+    <div class="footer-sub">cocofreshbd.com · 01410586224</div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-overlay" id="admin-overlay">
+  <div class="admin-panel">
+    <div class="ap-handle"></div>
+    <div class="ap-title">Update Cart Location</div>
+    <div class="ap-sub">Enter your password to update today's schedule</div>
+
+    <!-- AUTH -->
+    <div class="auth-section" id="auth-section">
+      <div class="auth-row">
+        <input class="auth-input" type="password" id="pw-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPw()"/>
+        <button class="auth-btn" onclick="checkPw()">Unlock</button>
+      </div>
+      <div class="auth-error" id="auth-error">Wrong password. Try again.</div>
+    </div>
+
+    <!-- EDIT FORM -->
+    <div class="edit-section" id="edit-section">
+      <div class="save-success" id="save-success">✅ Saved! Customers can now see the updated location.</div>
+
+      <!-- Today's note -->
+      <div class="fg">
+        <label>Today's note (optional)</label>
+        <textarea id="edit-note" placeholder="e.g. Hot day — we have cold sealed cups ready!"></textarea>
+      </div>
+
+      <!-- Today's stops -->
+      <div class="fg">
+        <label>Today's stops</label>
+        <div class="stops-editor" id="stops-editor"></div>
+        <button class="add-stop-btn" onclick="addStopRow()">+ Add stop</button>
+      </div>
+
+      <!-- Week schedule -->
+      <div class="fg">
+        <label>This week's areas (one per day)</label>
+        <div class="week-editor">
+          <div class="we-title">Quick week plan</div>
+          <div id="week-editor-rows"></div>
+        </div>
+      </div>
+
+      <button class="save-btn" onclick="saveData()">Save & Publish</button>
+      <button class="close-btn" onclick="closeAdmin()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const KEY = 'cocofresh_tracker_v1';
+const ADMIN_PW = 'coco2026';
+
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// Default data
+const defaultData = {
+  today: {
+    note: '',
+    stops: [
+      {time:'2:00 PM', location:'Zindabazar', area:'Near main road', status:'upcoming'},
+      {time:'5:00 PM', location:'Amberkhana', area:'By the mosque', status:'upcoming'},
+    ]
+  },
+  week: {
+    Mon: 'Zindabazar & Amberkhana',
+    Tue: 'Subhanighat & Bondor Bazar',
+    Wed: 'SUST Gate & Tilagor',
+    Thu: 'Amberkhana & Modina Market',
+    Fri: 'Zindabazar & Airport Road',
+    Sat: 'Bondor Bazar & Laldighirpar',
+    Sun: 'Rest day — WhatsApp delivery available',
+  },
+  lastUpdated: ''
+};
+
+let D = loadData();
+
+function loadData(){
+  try{
+    const s = localStorage.getItem(KEY);
+    return s ? JSON.parse(s) : JSON.parse(JSON.stringify(defaultData));
+  }catch(e){ return JSON.parse(JSON.stringify(defaultData)); }
+}
+
+function saveToStorage(){
+  try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){}
+}
+
+// ── RENDER PUBLIC VIEW ──
+function renderPublic(){
+  const now = new Date();
+  const todayStr = `${DAYS[now.getDay()]}, ${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+  document.getElementById('today-date-display').textContent = todayStr;
+
+  const stops = D.today.stops || [];
+
+  // Auto-compute status based on time
+  const nowMins = now.getHours()*60+now.getMinutes();
+  stops.forEach(s => {
+    if(!s.time) return;
+    const t = parseTime(s.time);
+    if(t === null) return;
+    if(t + 90 < nowMins) s.status = 'done';
+    else if(t <= nowMins) s.status = 'active';
+    else s.status = 'upcoming';
+  });
+
+  // Live text
+  const activeStop = stops.find(s => s.status === 'active');
+  const nextStop = stops.find(s => s.status === 'upcoming');
+  if(activeStop){
+    document.getElementById('live-text').textContent = `We're at ${activeStop.location} right now`;
+    document.getElementById('today-status-badge').textContent = 'Live now';
+    document.getElementById('today-status-badge').style.background = 'rgba(255,255,255,0.3)';
+  } else if(nextStop){
+    document.getElementById('live-text').textContent = `Next stop: ${nextStop.location} at ${nextStop.time}`;
+    document.getElementById('today-status-badge').textContent = 'Coming up';
+  } else if(stops.length){
+    document.getElementById('live-text').textContent = 'Cart done for today — order delivery!';
+    document.getElementById('today-status-badge').textContent = 'Done today';
+  } else {
+    document.getElementById('live-text').textContent = 'Check back tomorrow for locations';
+    document.getElementById('today-status-badge').textContent = 'Updated soon';
+  }
+
+  // Note
+  const noteEl = document.getElementById('today-note');
+  if(D.today.note){
+    noteEl.textContent = '💬 ' + D.today.note;
+    noteEl.classList.add('show');
+  } else {
+    noteEl.classList.remove('show');
+  }
+
+  // Stops list
+  const list = document.getElementById('stops-list');
+  if(!stops.length){
+    list.innerHTML = `<div class="no-stops"><div class="ns-icon">📍</div><div>No locations set yet.<br>Check back in the morning!</div></div>`;
+    return;
+  }
+  list.innerHTML = stops.map(s => `
+    <div class="stop ${s.status}">
+      <div class="stop-time">${s.time||''}</div>
+      <div class="stop-dot dot-${s.status||'upcoming'}"></div>
+      <div class="stop-info">
+        <div class="stop-name">${s.location||''}</div>
+        <div class="stop-area">${s.area||''}</div>
+      </div>
+      ${s.status==='active'?'<div class="stop-tag">Here now</div>':
+        s.status==='done'?'<div class="stop-tag done">Done</div>':
+        '<div class="stop-tag upcoming">Coming</div>'}
+    </div>`).join('');
+
+  // Week schedule
+  const weekEl = document.getElementById('week-schedule');
+  const todayDay = DAYS[now.getDay()];
+  const dayOrder = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  weekEl.innerHTML = dayOrder.map(day => {
+    const isToday = day === todayDay;
+    const val = D.week[day] || '';
+    return `<div class="day-row ${isToday?'today-row':''}">
+      <div class="day-left">
+        <div class="day-name">${day}${isToday?'<br><span class="today-badge">Today</span>':''}</div>
+      </div>
+      <div class="day-divider"></div>
+      <div class="day-stops">
+        ${val ? `<div class="ds-item"><span class="ds-name">${val}</span></div>` : '<div class="ds-empty">TBC</div>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function parseTime(str){
+  if(!str) return null;
+  const m = str.match(/(\d+):(\d+)\s*(AM|PM)/i);
+  if(!m) return null;
+  let h=parseInt(m[1]), min=parseInt(m[2]);
+  if(m[3].toUpperCase()==='PM'&&h!==12) h+=12;
+  if(m[3].toUpperCase()==='AM'&&h===12) h=0;
+  return h*60+min;
+}
+
+// ── ADMIN ──
+function openAdmin(){
+  document.getElementById('admin-overlay').classList.add('show');
+  document.getElementById('pw-input').focus();
+}
+function closeAdmin(){
+  document.getElementById('admin-overlay').classList.remove('show');
+  document.getElementById('edit-section').classList.remove('show');
+  document.getElementById('auth-section').style.display='block';
+  document.getElementById('pw-input').value='';
+  document.getElementById('auth-error').classList.remove('show');
+  document.getElementById('save-success').classList.remove('show');
+}
+
+function checkPw(){
+  const pw = document.getElementById('pw-input').value;
+  if(pw === ADMIN_PW){
+    document.getElementById('auth-section').style.display='none';
+    document.getElementById('edit-section').classList.add('show');
+    buildEditForm();
+  } else {
+    document.getElementById('auth-error').classList.add('show');
+  }
+}
+
+function buildEditForm(){
+  document.getElementById('edit-note').value = D.today.note || '';
+  buildStopRows();
+  buildWeekRows();
+}
+
+function buildStopRows(){
+  const ed = document.getElementById('stops-editor');
+  const stops = D.today.stops || [];
+  ed.innerHTML = stops.map((s,i)=>`
+    <div class="stop-edit-row" id="ser-${i}">
+      <input placeholder="2:00 PM" value="${s.time||''}" id="st-${i}"/>
+      <input placeholder="Location name" value="${s.location||''}" id="sl-${i}"/>
+      <input placeholder="Area/detail" value="${s.area||''}" id="sa-${i}"/>
+      <button class="del-stop" onclick="delStop(${i})">✕</button>
+    </div>`).join('');
+}
+
+function addStopRow(){
+  if(!D.today.stops) D.today.stops=[];
+  D.today.stops.push({time:'',location:'',area:'',status:'upcoming'});
+  buildStopRows();
+}
+
+function delStop(i){
+  D.today.stops.splice(i,1);
+  buildStopRows();
+}
+
+function buildWeekRows(){
+  const dayOrder=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  document.getElementById('week-editor-rows').innerHTML = dayOrder.map(day=>`
+    <div class="we-row">
+      <div class="we-day">${day}</div>
+      <input placeholder="Areas / note for ${day}" value="${D.week[day]||''}" id="we-${day}"/>
+    </div>`).join('');
+}
+
+function saveData(){
+  // Collect stops
+  const stops = D.today.stops||[];
+  stops.forEach((s,i)=>{
+    s.time = document.getElementById('st-'+i)?.value||'';
+    s.location = document.getElementById('sl-'+i)?.value||'';
+    s.area = document.getElementById('sa-'+i)?.value||'';
+    s.status = 'upcoming';
+  });
+  D.today.stops = stops;
+  D.today.note = document.getElementById('edit-note').value;
+
+  // Collect week
+  const dayOrder=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  dayOrder.forEach(day=>{
+    const el=document.getElementById('we-'+day);
+    if(el) D.week[day]=el.value;
+  });
+
+  D.lastUpdated = new Date().toISOString();
+  saveToStorage();
+  renderPublic();
+
+  document.getElementById('save-success').classList.add('show');
+  setTimeout(()=>document.getElementById('save-success').classList.remove('show'),3000);
+}
+
+// Close overlay on background tap
+document.getElementById('admin-overlay').addEventListener('click',function(e){
+  if(e.target===this) closeAdmin();
+});
+
+// Init
+renderPublic();
+setInterval(renderPublic, 60000); // refresh every minute for status updates
+</script>
+</body>
+</html>
